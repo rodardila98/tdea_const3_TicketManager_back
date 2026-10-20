@@ -1,0 +1,58 @@
+Dependencias de Node.js
+
+node_modules/
+jspm_packages/
+
+Archivos de entorno y credenciales (Crítico para la seguridad)
+
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+.env.backup
+
+Archivos de registro (Logs)
+
+logs
+.log
+npm-debug.log
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+Directorios de compilación y empaquetado 
+
+dist/
+build/
+out/
+
+Herramientas de pruebas y cobertura
+
+coverage/
+.nyc_output/
+
+Archivos temporales de ORM (Sequelize/Prisma)
+
+*.sqlite
+.sequelize-auto.sqlite
+
+Configuraciones de Editores e IDEs
+
+.vscode/
+.idea/
+*.suo
+.ntvs
+*.njsproj
+*.sln
+*.sw?
+
+Archivos generados por el Sistema Operativo
+
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
