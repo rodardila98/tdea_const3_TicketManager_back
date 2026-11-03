@@ -5,10 +5,11 @@ const controller = require('../controllers/usuario.controller');
 // Importa middlewares de seguridad
 const auth = require('../middlewares/auth.middleware');
 const role = require('../middlewares/role.middleware');
+const rateLimiter = require('../middlewares/rateLimiter.middleware');
 
-// Rutas públicas
+// Rutas públicas (Login protegido con límite de 10 intentos cada 15 minutos)
 router.post('/register', controller.register);
-router.post('/login', controller.login);
+router.post('/login', rateLimiter(10, 15 * 60 * 1000), controller.login);
 
 // Rutas protegidas (exigen autenticación con JWT)
 router.use(auth);

@@ -24,8 +24,29 @@ const errorHandler = require('./src/middlewares/error.middleware');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Middlewares globales
-app.use(cors());
+// 1. Cabeceras de seguridad HTTP básicas
+app.use((req, res, next) => {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    next();
+});
+
+// 2. Configuración de CORS restringido a los orígenes del Frontend (Vite)
+const origenesPermitidos = ['http://localhost:5173', 'http://127.0.0.1:5173'];
+app.use(cors({
+    origin: (origin, callback) => {
+        // Permitir solicitudes sin origen (como Postman o curl en desarrollo) o desde la lista de orígenes autorizados
+        if (!origin || origenesPermitidos.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Acceso bloqueado por política de CORS'));
+        }
+    },
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 app.use(express.json());
 
 // Montaje de rutas
