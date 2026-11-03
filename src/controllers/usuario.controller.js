@@ -30,6 +30,11 @@ exports.getAll = async (req, res, next) => {
 
 exports.getById = async (req, res, next) => {
     try {
+        // Un agente solo puede ver su propio perfil; el admin puede consultar cualquiera
+        if (req.user.role !== 'admin' && req.user.id !== parseInt(req.params.id, 10)) {
+            return res.status(403).json({ error: 'No tienes permiso para ver este perfil' });
+        }
+
         const data = await service.getById(req.params.id);
         if (!data) return res.status(404).json({ error: 'Usuario no encontrado' });
         res.json(data);
