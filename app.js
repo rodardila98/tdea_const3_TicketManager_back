@@ -2,6 +2,16 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 
+// Validación de variables de entorno obligatorias antes de iniciar el servidor
+const variablesObligatorias = ['JWT_SECRET', 'DB_PASSWORD', 'DB_DATABASE', 'DB_USER'];
+const variablesFaltantes = variablesObligatorias.filter((variable) => !process.env[variable]);
+
+if (variablesFaltantes.length > 0) {
+    console.error(`\n❌ Error crítico: Faltan variables obligatorias en el archivo .env: ${variablesFaltantes.join(', ')}`);
+    console.error('El servidor no puede arrancar sin esta configuración.\n');
+    process.exit(1);
+}
+
 const sequelize = require('./src/config/database');
 require('./src/models'); // Registra relaciones
 

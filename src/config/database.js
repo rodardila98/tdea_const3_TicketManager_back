@@ -1,10 +1,11 @@
 const { Sequelize } = require('sequelize');
 require('dotenv').config();
 
+// Configuración de conexión a PostgreSQL usando variables de entorno
 const sequelize = new Sequelize(
-    process.env.DB_DATABASE || 'ticket_manager',
-    process.env.DB_USER || 'postgres',
-    process.env.DB_PASSWORD || '12345',
+    process.env.DB_DATABASE,
+    process.env.DB_USER,
+    process.env.DB_PASSWORD, // Sin contraseña quemada en código
     {
         host: process.env.DB_HOST || 'localhost',
         port: process.env.DB_PORT || 5432,

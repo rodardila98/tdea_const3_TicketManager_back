@@ -1,7 +1,5 @@
-const jwt = require('jsonwebtoken');
-require('dotenv').config();
-
-const SECRET = process.env.JWT_SECRET || 'mi_secreto';
+// Middleware para proteger rutas usando la función centralizada de verificación de JWT
+const { verificarToken } = require('../utils/jwt');
 
 module.exports = (req, res, next) => {
     const authHeader = req.headers['authorization'];
@@ -15,7 +13,8 @@ module.exports = (req, res, next) => {
     }
 
     try {
-        const decoded = jwt.verify(token, SECRET);
+        // Valida el token con el mismo secreto usado al crearlo
+        const decoded = verificarToken(token);
         req.user = decoded;
         next();
     } catch (err) {
