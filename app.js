@@ -3,7 +3,10 @@ const cors = require('cors');
 require('dotenv').config();
 
 // Validación de variables de entorno obligatorias antes de iniciar el servidor
-const variablesObligatorias = ['JWT_SECRET', 'DB_PASSWORD', 'DB_DATABASE', 'DB_USER'];
+const variablesObligatorias = process.env.DATABASE_URL
+    ? ['JWT_SECRET', 'DATABASE_URL']
+    : ['JWT_SECRET', 'DB_PASSWORD', 'DB_DATABASE', 'DB_USER'];
+
 const variablesFaltantes = variablesObligatorias.filter((variable) => !process.env[variable]);
 
 if (variablesFaltantes.length > 0) {
