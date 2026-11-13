@@ -1,0 +1,40 @@
+{
+  "development": {
+    "username": "neondb_owner",
+    "password": "npg_vBwMKP4Emx1D",
+    "database": "ticket_manager",
+    "host": "ep-blue-grass-bdetrzrh.c-8.us-east-2.aws.neon.tech",
+    "port": 5432,
+    "dialect": "postgres",
+    "dialectOptions": {
+      "ssl": {
+        "require": true,
+        "rejectUnauthorized": false
+      }
+    }
+  },
+  "test": {
+    "username": "neondb_owner",
+    "password": "npg_vBwMKP4Emx1D",
+    "database": "ticket_manager",
+    "host": "ep-blue-grass-bdetrzrh.c-8.us-east-2.aws.neon.tech",
+    "port": 5432,
+    "dialect": "postgres",
+    "dialectOptions": {
+      "ssl": {
+        "require": true,
+        "rejectUnauthorized": false
+      }
+    }
+  },
+  "production": {
+    "use_env_variable": "DATABASE_URL",
+    "dialect": "postgres",
+    "dialectOptions": {
+      "ssl": {
+        "require": true,
+        "rejectUnauthorized": false
+      }
+    }
+  }
+}

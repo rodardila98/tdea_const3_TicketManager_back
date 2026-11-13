@@ -5,7 +5,7 @@ jspm_packages/
 
 Archivos de entorno y credenciales (Crítico para la seguridad)
 
-##.env
+.env
 .env.local
 .env.development
 .env.test
@@ -56,3 +56,4 @@ Archivos generados por el Sistema Operativo
 .Trashes
 ehthumbs.db
 Thumbs.db
+.neon
