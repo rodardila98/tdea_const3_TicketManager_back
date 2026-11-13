@@ -2,58 +2,41 @@
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
-    /**
-     * Add altering commands here.
-     *
-     * Example:
-     * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
-     * 
-     * 
-     */
-
-await queryInterface.createTable('usuarios', {
-        id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            autoIncrement: true
-        },
-        nombre: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            validate: {
-                notEmpty: { msg: 'El nombre es obligatorio' }
-            }
-        },
-        email: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            unique: { msg: 'El correo electrónico ya está registrado' },
-            validate: {
-                isEmail: { msg: 'Debe ingresar un correo electrónico válido' }
-            }
-        },
-        password: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            validate: {
-                notEmpty: { msg: 'La contraseña es obligatoria' }
-            }
-        },
-        role: {
-            type: DataTypes.ENUM('admin', 'agente'),
-            defaultValue: 'agente'
-        } 
-  } );
-  
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable('usuarios', {
+      id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+      },
+      nombre: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      email: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true
+      },
+      password: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      role: {
+        type: Sequelize.ENUM('admin', 'agente'),
+        defaultValue: 'agente',
+        allowNull: false
+      }
+    });
   },
 
-  async down (queryInterface, Sequelize) {
-    /**
-     * Add reverting commands here.
-     *
-     * Example:
-     * await queryInterface.dropTable('users');
-     */
+  async down(queryInterface, Sequelize) {
+    await queryInterface.dropTable('usuarios');
+
+    // En PostgreSQL, eliminamos el tipo ENUM creado para usuarios
+    if (queryInterface.sequelize.getDialect() === 'postgres') {
+      await queryInterface.sequelize.query('DROP TYPE IF EXISTS "enum_usuarios_role";');
+    }
   }
 };
