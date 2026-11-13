@@ -35,24 +35,34 @@ app.use((req, res, next) => {
     next();
 });
 
-// 2. Configuración de CORS restringido a los orígenes del Frontend (Vite)
+// 2. Configuración de CORS restringido a los orígenes del Frontend (Vite / Vercel)
 const origenesPermitidos = [
     'http://localhost:5173',
     'http://127.0.0.1:5173',
-    process.env.FRONTEND_URL
+    'https://tdea-const3-ticket-manager-front-flame.vercel.app',
+    process.env.FRONTEND_URL ? process.env.FRONTEND_URL.replace(/\/$/, '') : null
 ].filter(Boolean);
 
 app.use(cors({
     origin: (origin, callback) => {
-        // Permitir solicitudes sin origen, orígenes autorizados o dominios de despliegue en Render
-        if (!origin || origenesPermitidos.includes(origin) || (origin && origin.endsWith('.onrender.com'))) {
+        // Permitir solicitudes sin origen (como Postman o curl)
+        if (!origin) return callback(null, true);
+
+        const originNormalizado = origin.replace(/\/$/, '');
+        // Permitir orígenes autorizados, cualquier despliegue en Vercel (*.vercel.app) o en Render (*.onrender.com)
+        if (
+            origenesPermitidos.includes(originNormalizado) ||
+            originNormalizado.endsWith('.vercel.app') ||
+            originNormalizado.endsWith('.onrender.com')
+        ) {
             callback(null, true);
         } else {
             callback(new Error('Acceso bloqueado por política de CORS'));
         }
     },
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
 }));
 
 app.use(express.json());
