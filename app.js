@@ -36,11 +36,16 @@ app.use((req, res, next) => {
 });
 
 // 2. Configuración de CORS restringido a los orígenes del Frontend (Vite)
-const origenesPermitidos = ['http://localhost:5173', 'http://127.0.0.1:5173'];
+const origenesPermitidos = [
+    'http://localhost:5173',
+    'http://127.0.0.1:5173',
+    process.env.FRONTEND_URL
+].filter(Boolean);
+
 app.use(cors({
     origin: (origin, callback) => {
-        // Permitir solicitudes sin origen (como Postman o curl en desarrollo) o desde la lista de orígenes autorizados
-        if (!origin || origenesPermitidos.includes(origin)) {
+        // Permitir solicitudes sin origen, orígenes autorizados o dominios de despliegue en Render
+        if (!origin || origenesPermitidos.includes(origin) || (origin && origin.endsWith('.onrender.com'))) {
             callback(null, true);
         } else {
             callback(new Error('Acceso bloqueado por política de CORS'));
